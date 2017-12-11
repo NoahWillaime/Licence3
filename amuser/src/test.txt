@@ -1,0 +1,15 @@
+tab[5] = tab[6] ;
+tab[0] = inter ;
+alpha = tab[i] ;
+tab[nbCases - 1] = tab[i - 7] ;
+inter = 9 ;
+char     string = 0;
+for(int i = 0; i < 10; i++){
+
+}
+if(i < 10){
+
+}
+if (i < 20){
+
+}

@@ -1,0 +1,8 @@
+int i ;
+i = 6 ;
+tab[i] = tab[5] ;
+tab[0] = tab[0] ;
+int indice ;
+i = tab[1];
+tab[indice] = tab[i] ;
+tab[i] = (i + 12) * 2;
