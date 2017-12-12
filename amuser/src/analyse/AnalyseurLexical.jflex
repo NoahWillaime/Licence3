@@ -27,33 +27,43 @@ import java_cup.runtime.*;
   }
 %}
 
-var = [0-9]+
+%state commentaire
+cste = [0-9]+
 idf = [a-zA-Z]+
 typePrimitif = int|char|double|short|bool|boolean|float|long|byte
 oper = [\-+*/]
+commentaireSlashSlash = [/][/].*
+commentaireSlashEtoile = [/][*]
+commentaireEtoileSlash = [*][/]
 
 %%
-"["          { return symbol(CodesLexicaux.CROCHETOUVERT); }
+<YYINITIAL>"["          { return symbol(CodesLexicaux.CROCHETOUVERT); }
 
-"]"  		{ return symbol(CodesLexicaux.CROCHETFERMER); }
+<YYINITIAL>"]"  		{ return symbol(CodesLexicaux.CROCHETFERMER); }
 
-"("			{ return symbol(CodesLexicaux.PAROUVERT); }
+<YYINITIAL>"("			{ return symbol(CodesLexicaux.PAROUVERT); }
 
-")"			{ return symbol(CodesLexicaux.PARFERMER); }
+<YYINITIAL>")"			{ return symbol(CodesLexicaux.PARFERMER); }
 
-"="					{ return symbol(CodesLexicaux.EGAL); }
+<YYINITIAL>"="					{ return symbol(CodesLexicaux.EGAL); }
 
-";"                	{ return symbol(CodesLexicaux.POINTVIRGULE); }
+<YYINITIAL>";"                	{ return symbol(CodesLexicaux.POINTVIRGULE); }
 
-"tab"				{ return symbol(CodesLexicaux.TABNAME); }
+<YYINITIAL>"tab"				{ return symbol(CodesLexicaux.TABNAME); }
 
-{oper}				{ return symbol(CodesLexicaux.OP, yytext()); }
+<YYINITIAL>{oper}				{ return symbol(CodesLexicaux.OP, yytext()); }
 
-{var}				{ return symbol(CodesLexicaux.VAR, yytext()); }
+<YYINITIAL>{cste}				{ return symbol(CodesLexicaux.CSTE, yytext()); }
 
-{typePrimitif}		{ return symbol(CodesLexicaux.TYPEPRIMITIF, yytext()); }
+<YYINITIAL>{typePrimitif}		{ return symbol(CodesLexicaux.TYPEPRIMITIF, yytext()); }
 
-{idf}			{ return symbol(CodesLexicaux.IDF, yytext()) ; }
+<YYINITIAL>{idf}			{ return symbol(CodesLexicaux.VAR, yytext()) ; }
+
+<YYINITIAL>{commentaireSlashSlash} {}
+
+<YYINITIAL>{commentaireSlashEtoile}	{yybegin(commentaire);}
+
+<commentaire>{commentaireEtoileSlash} {yybegin(YYINITIAL);}
 
 .                       {}
 \n                      {}

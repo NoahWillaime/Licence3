@@ -6,3 +6,5 @@ int indice ;
 i = tab[1];
 tab[indice] = tab[i] ;
 tab[i] = (i + 12) * 2;
+tab[v-7+3-(var-i)*i] = (i+12)*2;
+int j = 25 - i + 3;

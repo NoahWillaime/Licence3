@@ -56,7 +56,7 @@ parser code {:
    case a String value, are listed on the next line down. */
 
 terminal Symbol    POINTVIRGULE, EGAL, CROCHETOUVERT, CROCHETFERMER, PAROUVERT, PARFERMER, TABNAME;
-terminal String    TYPEPRIMITIF, IDF, VAR, OP;
+terminal String    TYPEPRIMITIF, CSTE, VAR, OP;
 
    
 /* Non terminals used in the grammar section.  
@@ -64,7 +64,7 @@ terminal String    TYPEPRIMITIF, IDF, VAR, OP;
    integer value are listed.  An object value means that it can be any type, it isn't set to a 
    specific type.  So it could be an Integer or a String or whatever. */
 
-non terminal String	PROG, LINST, INST, DECL, AFF, TAB, INDICE, EXP ;
+non terminal String	PROG, LINST, INST, DAFF, DECL, AFF, TAB, INDICE, EXP ;
 precedence left OP ;
 /* ----------------------------Grammar Section-------------------- */
 
@@ -90,9 +90,14 @@ LINST	::= LINST INST
 	
 INST	::= DECL POINTVIRGULE
 	|		AFF POINTVIRGULE
+	|		DAFF POINTVIRGULE
 		;
 		
-DECL	::=	TYPEPRIMITIF:t IDF:i
+DAFF	::= TYPEPRIMITIF:t VAR:i EGAL EXP:e
+		{: System.out.println(i + " de type primitif " + t + "\n" + "affectation de l'expression("+e+") dans "+i); :}
+		;
+
+DECL	::=	TYPEPRIMITIF:t VAR:i
 		{: System.out.println(i + " de type primitif " + t) ; :}
 		;		
 		
@@ -110,7 +115,9 @@ EXP		::= EXP:e1 OP:o EXP:e2
 		{: RESULT = e1+" "+o+" "+e2; :}
 	|		PAROUVERT EXP:e PARFERMER
 		{: RESULT ="("+e+")"; :}
-	|		INDICE:i
+	|		VAR:i
+		{: RESULT = i; :}
+	|		CSTE:i
 		{: RESULT = i; :}
 		;
 
@@ -118,8 +125,6 @@ TAB		::= TABNAME CROCHETOUVERT INDICE:i CROCHETFERMER
 		{: RESULT = i; :}
 		;
 		
-INDICE	::= VAR:i
+INDICE	::= EXP:i
 		{: RESULT = i; :}
-	|		IDF:z
-		{: RESULT = z; :}
 		;
